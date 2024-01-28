@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# React Project - Time Series Data Presentation
 
 Development:
 
