@@ -10,10 +10,12 @@ interface TableState {
     dataPerPage: number;
 }
 
-export default function DataTable({ apiData }: { apiData: string }) {
+const MAX_PAGE_NUMBERS_TO_SHOW = 5;
+
+export default function DataTable({ apiData, dataPerPage }: { apiData: string, dataPerPage?: number }) {
     const [tableState, setTableState] = useState<TableState>({
         currentPage: 1,
-        dataPerPage: 25,
+        dataPerPage: dataPerPage ?? 50,
     });
 
     const indexOfLastData = tableState.currentPage * tableState.dataPerPage;
@@ -35,9 +37,8 @@ export default function DataTable({ apiData }: { apiData: string }) {
     const currentData = dataPoints.slice(indexOfFirstData, indexOfLastData);
 
     const pageNumbers: number[] = [];
-    const maxPageNumbersToShow = 5;
     const totalPages = Math.ceil(dataPoints.length / tableState.dataPerPage);
-    const halfMaxPageNumbers = Math.floor(maxPageNumbersToShow / 2);
+    const halfMaxPageNumbers = Math.floor(MAX_PAGE_NUMBERS_TO_SHOW / 2);
 
     for (let i = 1; i <= totalPages; i++) {
         if (
@@ -64,7 +65,7 @@ export default function DataTable({ apiData }: { apiData: string }) {
         setTableState({ ...tableState, currentPage: pageNumber });
 
     return (
-        <>
+        <div className="data-table-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -97,6 +98,8 @@ export default function DataTable({ apiData }: { apiData: string }) {
                 >
                     &laquo;
                 </button>
+                <br className="mobile-hidden" />
+                <br className="mobile-hidden" />
 
                 {pageNumbers.map((number, index) => (
                     <Fragment key={number}>
@@ -115,7 +118,8 @@ export default function DataTable({ apiData }: { apiData: string }) {
                         </button>
                     </Fragment>
                 ))}
-
+                <br className="mobile-hidden" />
+                <br className="mobile-hidden" />
                 <button
                     onClick={handleNextPage}
                     disabled={tableState.currentPage === totalPages}
@@ -131,6 +135,6 @@ export default function DataTable({ apiData }: { apiData: string }) {
                     &raquo;&raquo;
                 </button>
             </div>
-        </>
+        </div>
     );
 }
